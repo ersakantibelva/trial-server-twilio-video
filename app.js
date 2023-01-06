@@ -3,10 +3,12 @@ const { v4: uuidv4 } = require("uuid");
 const AccessToken = require("twilio").jwt.AccessToken;
 const VideoGrant = AccessToken.VideoGrant;
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 5000;
 
 app.use(express.json());
+app.use(cors());
 
 const twilioClient = require("twilio")(
   process.env.TWILIO_API_KEY_SID,
