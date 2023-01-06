@@ -31,12 +31,12 @@ const findOrCreateRoom = async (roomName) => {
   }
 }
 
-const getAccessToken = (roomName) => {
+const getAccessToken = (roomName, username) => {
   const token = new AccessToken(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_API_KEY_SID,
     process.env.TWILIO_API_KEY_SECRET,
-    { identity: uuidv4() }
+    { identity: username }
   )
 
   const videoGrant = new VideoGrant({
@@ -50,14 +50,14 @@ const getAccessToken = (roomName) => {
 
 app.post('/join-room', async (req, res) => {
   try {
-    const { roomName } = req.body
+    const { roomName, username } = req.body
     if(!roomName) {
       return res.status(400).send("Must include roomName argument.");
     }
 
     findOrCreateRoom(roomName)
 
-    const token = getAccessToken(roomName)
+    const token = getAccessToken(roomName, username)
 
     res.status(201).json({ token })
   } catch (error) {
